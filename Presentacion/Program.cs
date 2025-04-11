@@ -25,6 +25,9 @@ builder.Services.AddScoped<S_Carrera>();
 builder.Services.AddScoped<B_Carrera>();
 builder.Services.AddScoped<CarreraRep>();
 
+builder.Services.AddScoped<SweetAlertServicio>();
+builder.Services.AddScoped<ToasterServicio>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;

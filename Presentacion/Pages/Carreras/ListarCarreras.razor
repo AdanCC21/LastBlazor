@@ -1,30 +1,21 @@
 ﻿@page "/carreras"
 
 @using Entitties.Models;
+@using Microsoft.AspNetCore.Components.Routing
 @using Services;
 
 @inject S_Carrera carreraService;
+@inject NavigationManager navigationManager
+@inject SweetAlertServicio SweetAlert
+@inject ToasterServicio Toaster;
 
 <div class="container">
 	<h4 class="fw-bold mt-3 mb-3 "> Gestión de carreras</h4>
-	@* <div class="row p-2 mt-3 border border-1 border-success"> *@
-	@* 	<div class="col-2"> *@
-	@* 		<h6 class="card-title text-success fw-bold mt-2">Listado de carreras</h6> *@
-	@* 	</div> *@
-	@* 	<div class="col-5"> *@
-	@* 		<InputText @bind-Value="criterioBusqueda" class="form-control" placeholder="Criterio de búsqueda"></InputText> *@
-	@* 	</div> *@
-	@* 	<div class="col-3"> *@
-	@* 		<button class="btn btn-outline-success" @onclick="()=>BuscarMateria(criterioBusqueda)"><i class="bi bi-search"> Buscar</i></button> *@
-	@* 	</div> *@
-	@* 	<div class="col-2 align-content-end"> *@
-	@* 		<NavLink href="InsertarCarrera" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i>&nbsp; Nueva Carrera</NavLink> *@
-	@* 	</div> *@
-	@* </div> *@
 
 	<div class="row mt-3 mb-5">
-		<div>
+		<div class="d-flex flex-column w-100">
 			<p class="fw-bold">Existen: @LstCarreras.Count() carreras.</p>
+			<NavLink href="InsertarCarrera" class="ms-auto mb-2 btn btn-success" style="width:fit-content;"><i class="bi bi-plus-circle-fill"></i>&nbsp; Nueva Carrera</NavLink>
 		</div>
 		<table class="table table-striped table-bordered">
 			<thead>
@@ -45,7 +36,7 @@
 				}
 				else
 				{
-					foreach (var carrera in LstCarreras)
+					foreach (E_Carrera carrera in LstCarreras)
 					{
 						<tr class="text-center">
 							<td>@carrera.ClaveCarrera</td>
@@ -57,9 +48,8 @@
 								</span>
 							</td>
 							<td class="text-center">
-								@* <NavLink href="@($"ModificarCarrera/{carrera.IdCarrera}")" class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Edita los datos de la carrera"><i class="bi bi-pen"></i></NavLink> *@
-								@* <NavLink href="@($"InsertarMateria/{carrera.IdCarrera}")" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" title="Agregar materias a la materia"><i class="bi bi-layout-text-sidebar"></i></NavLink> *@
-								@* <NavLink href="@($"ListarMateriasPorCarrera/{carrera.IdCarrera}")" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" title="Mostrar materias de la carrera"><i class="bi bi-layout-text-sidebar"></i></NavLink> *@
+								<NavLink href="@($"ModificarCarrera/{carrera.IdCarrera}")" class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Edita los datos de la carrera"><i class="bi bi-pen"></i></NavLink>
+								<NavLink href="@($"InsertarMateria/{carrera.IdCarrera}")" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" title="Agregar materias a la materia"><i class="bi bi-layout-text-sidebar"></i></NavLink>
 								<button class="btn btn-outline-danger btn-sm" data-toggle="tooltip" title="Borra los datos de la materia" @onclick="()=>ConfirmDeleteCarrera(carrera.IdCarrera)"> <i class="bi bi-trash-fill"></i> </button>
 							</td>
 						</tr>
@@ -75,40 +65,46 @@
 @code {
 	private IEnumerable<E_Carrera> LstCarreras { get; set; } = new List<E_Carrera>();
 
-	// private string criterioBusqueda { get; set; } = string.Empty;
-
-
-	private string msg = string.Empty;
-
 
 	protected override async Task OnInitializedAsync()
 	{
 		LstCarreras = await carreraService.ObtenerCarreras();
 	}
 
+	protected async Task ConfirmDeleteCarrera(int idCarrera)
+	{
+		
+		bool confirm = await SweetAlert.ShowConfirm("!!ESPERA!!", "Estas a punto de eliminar una carrera, estas seguro?", "warning");
+		if (confirm)
+		{
+			try
+			{
+				await BorrarCarrera(idCarrera);
+				await Toaster.ShowSuccess("carrera eliminada", "Exito");
+			}catch(Exception ex)
+			{
+				await Toaster.ShowSuccess(ex.Message, "Exito");
 
-	// private async Task BuscarMateria(string criterioBusqueda)
-	// {
-	// 	LstCarreras = await carreraService.ObtenerCarreras(criterioBusqueda);
-	// }
+			}
+		}
+		else
+		{
+			await SweetAlert.ShowAlert("Movimiento Cancelado", "No se realizo ningun cambio");
+		}
+	}
 
 	private async Task BorrarCarrera(int idCarrera)
 	{
-		await carreraService.EliminarCarrera(idCarrera);
-		LstCarreras = await carreraService.ObtenerCarreras();
-	}
+		try
+		{
+			await carreraService.EliminarCarrera(idCarrera);
+			LstCarreras = await carreraService.ObtenerCarreras();
+		}
+		catch (Exception ex)
+		{
+			await SweetAlert.ShowAlert(ex.Message, "No se realizo ningun cambio");
 
-	// protected async Task ConfirmDeleteCarrera(int idCarrera)
-	// {
-	// 	bool confirm = await SweetAlert.ShowConfirm("!!ESPERA!!", "Estas a punto de eliminar una carrera, estas seguro?", "warning");
-	// 	if (confirm)
-	// 	{
-	// 		await BorrarCarrera(idCarrera);
-	// 		await Toaster.ShowSuccess("carrera eliminada", "Exito");
-	// 	}
-	// 	else
-	// 	{
-	// 		await SweetAlert.ShowAlert("Movimiento Cancelado", "No se realizo ningun cambio");
-	// 	}
-	// }
+		}
+
+	}
 }

@@ -71,26 +71,27 @@
 		LstCarreras = await carreraService.ObtenerCarreras();
 	}
 
-	protected async Task ConfirmDeleteCarrera(int idCarrera)
+	protected void ConfirmDeleteCarrera(int idCarrera)
 	{
 		
-		bool confirm = await SweetAlert.ShowConfirm("!!ESPERA!!", "Estas a punto de eliminar una carrera, estas seguro?", "warning");
-		if (confirm)
-		{
-			try
-			{
-				await BorrarCarrera(idCarrera);
-				await Toaster.ShowSuccess("carrera eliminada", "Exito");
-			}catch(Exception ex)
-			{
-				await Toaster.ShowSuccess(ex.Message, "Exito");
+		navigationManager.NavigateTo("/");
+		// bool confirm = await SweetAlert.ShowConfirm("!!ESPERA!!", "Estas a punto de eliminar una carrera, estas seguro?", "warning");
+		// if (confirm)
+		// {
+		// 	try
+		// 	{
+		// 		await BorrarCarrera(idCarrera);
+		// 		await Toaster.ShowSuccess("carrera eliminada", "Exito");
+		// 	}catch(Exception ex)
+		// 	{
+		// 		await Toaster.ShowSuccess(ex.Message, "Exito");
 
-			}
-		}
-		else
-		{
-			await SweetAlert.ShowAlert("Movimiento Cancelado", "No se realizo ningun cambio");
-		}
+		// 	}
+		// }
+		// else
+		// {
+		// 	await SweetAlert.ShowAlert("Movimiento Cancelado", "No se realizo ningun cambio");
+		// }
 	}
 
 	private async Task BorrarCarrera(int idCarrera)

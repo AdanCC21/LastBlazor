@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data.IRepository
 {
-    public interface IPlanDePlanDeMateria
+    public interface IPlanMateriaRep
     {
         public Task InsertarPlanDeMateria(E_PlanDeMateria newPlanDeMateria);
         public Task EliminarPlanDeMateria(int id);

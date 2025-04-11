@@ -5,6 +5,7 @@ namespace Entitties.Models
 {
     public class E_PlanDeMateria
     {
+        [Key]
         public int IdPlanEstudioMateria { get; set; }
 
         [ForeignKey("PlanEstudio")]

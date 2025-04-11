@@ -3,6 +3,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250410172124_initmig")]
+    partial class initmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,34 +82,6 @@ namespace Data.Migrations
                     b.HasKey("idPlanEstudio");
 
                     b.ToTable("PlanDeEstudios");
-                });
-
-            modelBuilder.Entity("Entitties.Models.E_PlaneDeMateria", b =>
-                {
-                    b.Property<int>("idPlanEstudioMateria")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPlanEstudioMateria"));
-
-                    b.Property<int>("idMateria")
-                        .HasColumnType("int");
-
-                    b.Property<int>("materiaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("planEstudio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("planEstudioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("semestre")
-                        .HasColumnType("int");
-
-                    b.HasKey("idPlanEstudioMateria");
-
-                    b.ToTable("PlanDeEstudiosMaterias");
                 });
 #pragma warning restore 612, 618
         }

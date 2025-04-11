@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entitties.Models
 {
-    public class E_Etapas
+    public class E_Etapa
     {
         public bool basica { get; set; }
         public bool avanzada { get; set; }

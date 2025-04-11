@@ -12,6 +12,6 @@ namespace Data.Context
         public DbSet<E_Carrera> Carrera { get; set; }
         public DbSet<E_Materia> Materias { get; set; }
         public DbSet<E_PlanDeEstudio> PlanDeEstudios { get; set; }
-        public DbSet<E_PlaneDeMateria> PlanDeEstudiosMaterias { get; set; }
+        public DbSet<E_PlanDeMateria> PlanDeEstudiosMaterias { get; set; }
     }
 }
